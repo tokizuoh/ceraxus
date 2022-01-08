@@ -1,6 +1,6 @@
-# go-docker-template
+# ceraxus
   
-Template files when building a Go development environment with docker.  
+Get and summarize iOS app reviews.
   
 
 ## Docker
