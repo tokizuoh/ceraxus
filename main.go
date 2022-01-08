@@ -1,15 +1,18 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"model"
 )
 
 func main() {
+	// Fetch
 	url := "https://itunes.apple.com/jp/rss/customerreviews/id=340368403/json"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -27,5 +30,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println(data)
+	f, err := os.Create("tmp.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Write CSV
+	w := csv.NewWriter(f)
+	colmuns := []string{"id", "version", "name", "date", "title", "content"}
+	if err := w.Write(colmuns); err != nil {
+		log.Fatal(err)
+	}
+
+	for _, entry := range data.Feed.Entry {
+		id := entry.ID.Label
+		version := entry.ImVersion.Label
+		name := entry.Author.Name.Label
+		date := entry.Updated.Label
+		title := entry.Title.Label
+		content := entry.Content.Label
+
+		line := []string{id, version, name, date, title, content}
+		if err := w.Write(line); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	log.Println("SUCCESSED!")
 }
