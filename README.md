@@ -26,9 +26,3 @@ docker-compose version 1.29.2, build 5becea4c
 ```bash
 > make run
 ```
-  
-### Tests
-  
-```bash
-> make test
-```
